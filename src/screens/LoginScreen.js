@@ -187,7 +187,7 @@ const LoginScreen = () => {
         onPress={handleSubmitPress}
         style={{
           marginTop: 100,
-          backgroundColor: 'lightblue',
+          backgroundColor: '#ebc249',
           width: 141,
           height: 42,
           alignSelf: 'center',
@@ -196,7 +196,7 @@ const LoginScreen = () => {
         }}>
         <Text
           style={{
-            color: 'black',
+            color: 'white',
             alignSelf: 'center',
             fontSize: 16,
           }}>

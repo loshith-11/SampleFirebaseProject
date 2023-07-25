@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Animated,
+  Image,
+} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {
   responsiveHeight,
@@ -6,6 +13,9 @@ import {
 } from 'react-native-responsive-dimensions';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import Images from '../constant/Images';
+import Helpers from '../helpers/Helpers';
+import auth from '@react-native-firebase/auth';
 
 const DashBoard = () => {
   const navigation = useNavigation();
@@ -15,6 +25,7 @@ const DashBoard = () => {
   const [onlinePaymentTotal, setOnlinePaymentTotal] = useState(0);
   const [cashPaymentTotal, setCashPaymentTotal] = useState(0);
   const [attendanceCount, setAttendanceCount] = useState(0);
+  const [user, setUser] = useState();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -25,6 +36,17 @@ const DashBoard = () => {
       };
     }, []),
   );
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(user => {
+      console.log('user', JSON.stringify(user));
+      setUser(user);
+    });
+
+    return subscriber;
+  }, []);
+  // greeting value
+  var greeting = 'Good morning';
+  greeting = Helpers.getGreeting();
 
   const toggleButton = () => {
     let toValue = isButtonClicked ? 0 : 1;
@@ -114,13 +136,35 @@ const DashBoard = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.secondBoxShape}>
+        <Text style={{marginVertical: 5, fontSize: 22, color: 'black'}}>
+          Hi Admin
+        </Text>
+        <Text style={{fontSize: 15, color: 'black'}}>{greeting}</Text>
+      </View>
       {/* total Attendies, registered */}
       <View style={styles.boxView}>
         <View style={styles.boxShape}>
+          <Image
+            source={Images.ATTENDANCE_ICON}
+            style={{
+              width: responsiveWidth(8),
+              height: responsiveHeight(5),
+              tintColor: 'black',
+            }}
+          />
           <Text style={styles.boxText}> Total Attendies</Text>
           <Text style={styles.boxNumberText}>{attendanceCount}</Text>
         </View>
         <View style={[styles.boxShape, {marginLeft: responsiveHeight(5)}]}>
+          <Image
+            source={Images.REGISTERED_MEMBER_ICON}
+            style={{
+              width: responsiveWidth(10),
+              height: responsiveHeight(5),
+              tintColor: 'black',
+            }}
+          />
           <Text style={styles.boxText}>Registered</Text>
           <Text style={styles.boxNumberText}>{dataLength}</Text>
         </View>
@@ -128,33 +172,79 @@ const DashBoard = () => {
       {/* online Payment, Cash Received */}
       <View style={styles.boxView}>
         <View style={styles.boxShape}>
+          <Image
+            source={Images.ONLINE_PAYMENT}
+            style={{
+              width: responsiveWidth(10),
+              height: responsiveHeight(5),
+              tintColor: 'black',
+            }}
+          />
           <Text style={styles.boxText}>Online Payment</Text>
           <Text style={styles.boxNumberText}>Rs:{onlinePaymentTotal}</Text>
         </View>
         <View style={[styles.boxShape, {marginLeft: responsiveHeight(5)}]}>
+          <Image
+            source={Images.CASH_ON_HAND}
+            style={{
+              width: responsiveWidth(9),
+              height: responsiveHeight(5),
+              tintColor: 'black',
+            }}
+          />
           <Text style={styles.boxText}>Cash Received</Text>
           <Text style={styles.boxNumberText}> Rs:{cashPaymentTotal}</Text>
         </View>
       </View>
       {/* Buttons */}
-      {/* <View style={{marginTop: responsiveHeight(20)}}>
+      <View style={{marginTop: responsiveHeight(5)}}>
         <TouchableOpacity
           style={styles.createNewButton}
           onPress={() => navigation.navigate('CreateNewMember')}>
+          <Image
+            source={Images.ADD_MEMBER_ICON}
+            style={{
+              width: responsiveWidth(10),
+              height: responsiveHeight(5),
+              position: 'absolute',
+              left: 50,
+              tintColor: 'black',
+            }}
+          />
           <Text style={styles.buttonText}>Create new Member</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.createNewButton}
           onPress={() => navigation.navigate('RegisteredScreen')}>
+          <Image
+            source={Images.REGISTERED_MEMBER_ICON}
+            style={{
+              width: responsiveWidth(10),
+              height: responsiveHeight(5),
+              position: 'absolute',
+              left: 55,
+              tintColor: 'black',
+            }}
+          />
           <Text style={styles.buttonText}>Registered</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.createNewButton}
           onPress={() => navigation.navigate('ProfileScreen')}>
+          <Image
+            source={Images.MY_PROFILE_ICON}
+            style={{
+              width: responsiveWidth(6),
+              height: responsiveHeight(3),
+              position: 'absolute',
+              left: 63,
+              tintColor: 'black',
+            }}
+          />
           <Text style={styles.buttonText}>My Profile</Text>
         </TouchableOpacity>
-      </View> */}
-      <View
+      </View>
+      {/* <View
         style={{
           position: 'absolute',
           bottom: 0,
@@ -242,7 +332,7 @@ const DashBoard = () => {
             <Text style={{fontSize: 18, color: 'black'}}>Menu</Text>
           </Animated.View>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -260,42 +350,41 @@ const styles = StyleSheet.create({
   boxShape: {
     height: responsiveHeight(15),
     width: responsiveWidth(35),
-    backgroundColor: 'lightblue',
+    backgroundColor: '#ebc249',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: responsiveHeight(5),
     marginLeft: responsiveHeight(5),
     marginRight: responsiveHeight(1),
+    borderRadius: 5,
   },
   secondBoxShape: {
-    height: responsiveHeight(15),
-    width: responsiveWidth(35),
-    backgroundColor: 'lightblue',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: responsiveHeight(5),
-    marginLeft: responsiveHeight(17),
-    marginRight: responsiveHeight(15),
+    height: responsiveHeight(10),
+    width: responsiveWidth(85),
+    marginTop: responsiveHeight(2),
+    marginLeft: responsiveHeight(4),
   },
   createNewButton: {
-    height: responsiveHeight(5),
+    height: responsiveHeight(8),
     width: responsiveWidth(82),
-    backgroundColor: 'lightblue',
+    backgroundColor: '#ebc249',
     marginLeft: responsiveHeight(5),
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: responsiveHeight(5),
+    flexDirection: 'row',
+    borderRadius: 5,
   },
   boxText: {
-    color: 'black',
-    fontSize: 15,
+    color: 'white',
+    fontSize: 13,
   },
   boxNumberText: {
-    color: 'black',
-    fontSize: 18,
+    color: 'white',
+    fontSize: 19,
   },
   buttonText: {
-    color: 'black',
-    fontSize: 13,
+    color: 'white',
+    fontSize: 14,
   },
 });

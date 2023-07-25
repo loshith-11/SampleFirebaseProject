@@ -78,6 +78,8 @@ const RegisteredScreen = () => {
   useEffect(() => {
     getDataBase().then(res => {
       setMyData(res);
+      setFilteredData(res);
+      console.log('response from database==..',res);
     });
     console.log('useEffect called');
     console.log('myData++++>>>', myData);

@@ -18,6 +18,7 @@ import {
 import Images from '../constant/Images';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import Helpers from '../helpers/Helpers';
 
 const CreateNewMember = () => {
   const navigation = useNavigation();
@@ -51,43 +52,155 @@ const CreateNewMember = () => {
   const amountReceivedRef = useRef();
   const transactionIdRef = useRef();
 
-  // Function to handle form submission
   const handleSubmit = () => {
-    // Perform validation here
-    if (
-      !name ||
-      !rollNo ||
-      !batch ||
-      !email ||
-      !mobileNo ||
-      !paymentType ||
-      !amountReceived ||
-      !transactionId
-    ) {
-      setNameError('please enter the name');
-      setRollNoError('please enter the Roll No');
-      setBatchError('please enter the batch');
-      setEmailError('please enter the email');
-      setMobileNoError('please enter the Mobile Number');
-      setPaymentTypeError('please select the payment type');
-      setAmountReceivedError('please enter the amount');
-      setTransactionIdError('please enter the TransactionId');
-
-      // Display an error message or handle the validation error
-      console.log('Please fill in all the required fields');
-      return;
+    console.log('handleSubimt called')
+    if (isValidFields() === true) {
+      addDataBase();
     }
-    const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (!emailPattern.test(email)) {
-      setEmailError('Please enter a valid email address');
-      console.log('Invalid email format');
-      return;
-    }
-
-    // Submit the form or perform further actions
-    console.log('Form submitted');
-    addDataBase();
   };
+
+  const isValidFields = () => {
+    var isValidName = 0;
+    var isValidRollNo = 0;
+    var isValidBatch = 0;
+    var isValidEmail = 0;
+    var isValidMobileNo = 0;
+    var isValidPaymentType = 0;
+    var isValidAmountReceived = 0;
+    var isValidTransactionId = 0;
+
+    if (name.trim().length === 0) {
+      isValidName = 0;
+      setNameError('please enter the name');
+    } else {
+      isValidName = 1;
+      setNameError('');
+    }
+
+    if (rollNo.trim().length === 0) {
+      isValidRollNo = 0;
+      setRollNoError('please enter the Roll No');
+    } else if (rollNo.trim().length < 2 || rollNo.trim().length > 4) {
+      isValidRollNo = 0;
+      setRollNoError('please enter the valid Roll No');
+    } else {
+      isValidRollNo = 1;
+      setRollNoError('');
+    }
+
+    if (batch.trim().length === 0) {
+      isValidBatch = 0;
+      setBatchError('please enter the batch');
+    } else if (batch.trim().length < 4 || batch.trim().length > 5) {
+      isValidBatch = 0;
+      setBatchError('please enter the valid batch');
+    } else {
+      isValidBatch = 1;
+      setBatchError('');
+    }
+    if (email.trim().length === 0) {
+      isValidEmail = 0;
+      setEmailError('Please enter email address');
+    } else if (Helpers.isEmailValid(email) === false) {
+      isValidEmail = 0;
+      setEmailError('Please enter a valid email');
+    } else {
+      isValidEmail = 1;
+      setEmailError('');
+    }
+
+    if (mobileNo.trim().length === 0) {
+      isValidMobileNo = 0;
+      setMobileNoError('Please enter phone number');
+    } else if (mobileNo.trim().length < 10 || mobileNo.trim().length > 12) {
+      isValidMobileNo = 0;
+      setMobileNoError('Please enter valid phone number');
+    } else {
+      isValidMobileNo = 1;
+      setMobileNoError('');
+    }
+    if (paymentType.trim().length === 0) {
+      isValidPaymentType = 0;
+      setPaymentTypeError('Please select payment Type');
+    } else {
+      isValidPaymentType = 1;
+      setPaymentTypeError('');
+    }
+
+    if (amountReceived.trim().length === 0) {
+      isValidAmountReceived = 0;
+      setAmountReceivedError('please enter the amount');
+    } else if (batch.trim().length < 4 || batch.trim().length > 5) {
+      isValidAmountReceived = 0;
+      setAmountReceivedError('Please enter valid amount');
+    } else {
+      isValidAmountReceived = 1;
+      setAmountReceivedError('');
+    }
+    if (transactionId.trim().length === 0) {
+      isValidTransactionId = 0;
+      setTransactionIdError('please enter the TransactionId');
+    // } else if (batch.trim().length < 12 || batch.trim().length > 14) {
+    //   isValidTransactionId = 0;
+    //   setTransactionIdError('please enter valid  TransactionId');
+    } else {
+      isValidTransactionId = 1;
+      setTransactionIdError('');
+    }
+    if (
+      isValidName === 1 &&
+      isValidRollNo === 1 &&
+      isValidBatch === 1 &&
+      isValidEmail === 1 &&
+      isValidMobileNo === 1 &&
+      isValidPaymentType === 1 &&
+      isValidAmountReceived === 1 &&
+      isValidTransactionId === 1
+    ) {
+      console.log('Form submitted');
+      return true;
+    } else {
+
+      return false;
+    }
+  };
+  // Function to handle form submission
+  // const handleSubmit = () => {
+  //   // Perform validation here
+  //   if (
+  //     !name ||
+  //     !rollNo ||
+  //     !batch ||
+  //     !email ||
+  //     !mobileNo ||
+  //     !paymentType ||
+  //     !amountReceived ||
+  //     !transactionId
+  //   ) {
+  //     setNameError('please enter the name');
+  //     setRollNoError('please enter the Roll No');
+  //     setBatchError('please enter the batch');
+  //     setEmailError('please enter the email');
+  //     setMobileNoError('please enter the Mobile Number');
+  //     setPaymentTypeError('please select the payment type');
+  //     setAmountReceivedError('please enter the amount');
+  //     setTransactionIdError('please enter the TransactionId');
+
+  //     // Display an error message or handle the validation error
+  //     console.log('Please fill in all the required fields');
+  //     return;
+  //   }
+  //   const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  //   if (!emailPattern.test(email)) {
+  //     setEmailError('Please enter a valid email address');
+  //     console.log('Invalid email format');
+  //     return;
+  //   }
+
+  //   // Submit the form or perform further actions
+  //   console.log('Form submitted');
+  //   addDataBase();
+  // };
 
   // Button Actions
   const backButtonAction = () => {
@@ -165,7 +278,7 @@ const CreateNewMember = () => {
           value={name}
           onChangeText={value => setName(value)}
         />
-        <Text style={{marginLeft: responsiveHeight(25), color: 'red'}}>
+        <Text style={{marginLeft: responsiveHeight(27), color: 'red'}}>
           {nameError}
         </Text>
       </View>
@@ -186,7 +299,7 @@ const CreateNewMember = () => {
           onChangeText={value => setRollNo(value)}
           keyboardType="numeric"
         />
-        <Text style={{marginLeft: responsiveHeight(25), color: 'red'}}>
+        <Text style={{marginLeft: responsiveHeight(26), color: 'red'}}>
           {rollNoError}
         </Text>
       </View>
@@ -207,7 +320,7 @@ const CreateNewMember = () => {
           onChangeText={value => setBatch(value)}
           keyboardType="numeric"
         />
-        <Text style={{marginLeft: responsiveHeight(25), color: 'red'}}>
+        <Text style={{marginLeft: responsiveHeight(27), color: 'red'}}>
           {batchError}
         </Text>
       </View>
@@ -228,7 +341,7 @@ const CreateNewMember = () => {
           onChangeText={value => setEmail(value)}
           keyboardType="email-address"
         />
-        <Text style={{marginLeft: responsiveHeight(25), color: 'red'}}>
+        <Text style={{marginLeft: responsiveHeight(23), color: 'red'}}>
           {emailError}
         </Text>
       </View>
@@ -249,7 +362,7 @@ const CreateNewMember = () => {
           onChangeText={value => setMobileNo(value)}
           keyboardType="phone-pad"
         />
-        <Text style={{marginLeft: responsiveHeight(20), color: 'red'}}>
+        <Text style={{marginLeft: responsiveHeight(23), color: 'red'}}>
           {mobileNoError}
         </Text>
       </View>
@@ -299,7 +412,7 @@ const CreateNewMember = () => {
           </View>
         )}
 
-        <Text style={{marginLeft: responsiveHeight(20), color: 'red'}}>
+        <Text style={{marginLeft: responsiveHeight(22), color: 'red'}}>
           {paymentTypeError}
         </Text>
       </View>
@@ -346,7 +459,7 @@ const CreateNewMember = () => {
         </Text>
       </View>
       <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit}>
-        <Text>Submit</Text>
+        <Text style={{color: 'white'}}>Submit</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -368,7 +481,7 @@ const styles = StyleSheet.create({
   buttonStyle: {
     height: responsiveHeight(5),
     width: responsiveWidth(55),
-    backgroundColor: 'lightblue',
+    backgroundColor: '#ebc249',
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: responsiveHeight(12),
