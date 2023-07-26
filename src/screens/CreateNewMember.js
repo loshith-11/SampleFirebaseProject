@@ -53,7 +53,7 @@ const CreateNewMember = () => {
   const transactionIdRef = useRef();
 
   const handleSubmit = () => {
-    console.log('handleSubimt called')
+    console.log('handleSubimt called');
     if (isValidFields() === true) {
       addDataBase();
     }
@@ -140,9 +140,9 @@ const CreateNewMember = () => {
     if (transactionId.trim().length === 0) {
       isValidTransactionId = 0;
       setTransactionIdError('please enter the TransactionId');
-    // } else if (batch.trim().length < 12 || batch.trim().length > 14) {
-    //   isValidTransactionId = 0;
-    //   setTransactionIdError('please enter valid  TransactionId');
+      // } else if (batch.trim().length < 12 || batch.trim().length > 14) {
+      //   isValidTransactionId = 0;
+      //   setTransactionIdError('please enter valid  TransactionId');
     } else {
       isValidTransactionId = 1;
       setTransactionIdError('');
@@ -160,7 +160,6 @@ const CreateNewMember = () => {
       console.log('Form submitted');
       return true;
     } else {
-
       return false;
     }
   };
