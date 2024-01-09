@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React, { useState ,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -17,23 +17,24 @@ import Images from '../constant/Images';
 import axios from 'axios';
 
 const Test = () => {
-    const [productData, setProductData] = useState([]);
+  const [productData, setProductData] = useState([]);
 
-    useEffect(() => {
-        // Fetch data from the API
-        const fetchData = async () => {
-          try {
-            const response = await axios.get(
-              'http://iroidtechnologies.in/Fressery/Fressery_Api/products'
-            );
-            setProductData(response.data); // Assuming the response data is an array
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-        };
-    
-        fetchData();
-      }, []);
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          'http://iroidtechnologies.in/Fressery/Fressery_Api/products',
+        );
+        setProductData(response.data); // Assuming the response data is an array
+        console.log('dsdsdsds', response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   const dummyProductListingData = [
     {
       id: '1',
@@ -53,6 +54,7 @@ const Test = () => {
     },
   ];
   const renderItem = ({item, index}) => {
+    console.log('Item>>....', item);
     return (
       <View
         style={{
@@ -64,7 +66,7 @@ const Test = () => {
           elevation: 15,
         }}>
         <View style={{marginLeft: 25, marginTop: 15}}>
-          <Image source={item?.productImage} style={{height: 70, width: 70}} />
+          <Image source={{uri: item?.image}} style={{height: 70, width: 70}} />
         </View>
         <View style={{marginTop: -100}}>
           <Text
@@ -74,7 +76,7 @@ const Test = () => {
               marginTop: responsiveHeight(5),
               color: 'black',
             }}>
-            {item?.productName}
+            {item?.pname}
           </Text>
         </View>
         <Text style={{color: 'black', marginLeft: responsiveHeight(15)}}>
@@ -92,7 +94,7 @@ const Test = () => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Text style={{color: 'black', fontSize: 10}}>{item?.gram}</Text>
+            <Text style={{color: 'black', fontSize: 10}}>{item?.size}</Text>
           </View>
           <View
             style={{
@@ -105,9 +107,18 @@ const Test = () => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Text style={{color: 'black', fontSize: 10}}>{item?.grams}</Text>
+            <Text style={{color: 'black', fontSize: 10}}>{item?.size}</Text>
           </View>
         </View>
+        <Text
+          style={{
+            color: 'black',
+            position: 'absolute',
+            left: responsiveHeight(38),
+            top: responsiveHeight(4),
+          }}>
+          Rs {item?.prize}
+        </Text>
         <View
           style={{
             height: responsiveHeight(4),
@@ -168,7 +179,7 @@ const Test = () => {
           <Text
             style={{
               fontSize: responsiveFontSize(1.5),
-              color: Colors.WHITE_COLOR,
+              color: 'white',
               fontWeight: '700',
             }}>
             Add to cart
@@ -177,6 +188,7 @@ const Test = () => {
       </View>
     );
   };
+  console.log('Product Data:', productData);
   return (
     <View style={{backgroundColor: 'white'}}>
       <View
@@ -196,9 +208,9 @@ const Test = () => {
           GREEN
         </Text>
       </View>
-      <View style={{marginTop:-95}}>
+      <View style={{marginTop: -95}}>
         <FlatList
-          data={dummyProductListingData}
+          data={productData?.data}
           renderItem={renderItem}
           keyExtractor={(item, index) => {
             return index.toString();
