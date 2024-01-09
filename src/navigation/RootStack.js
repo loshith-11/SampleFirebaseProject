@@ -12,6 +12,7 @@ import RegisteredScreen from '../screens/RegisteredScreen';
 import DetailScreen from '../screens/DetailScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import UserRegisterScreen from '../screens/UserRegisterScreen';
+import Test from '../screens/Test';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,8 @@ const RootStack = () => {
         <Stack.Screen name="RegisteredScreen" component={RegisteredScreen} />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
         <Stack.Screen name="DetailScreen" component={DetailScreen} />
+        <Stack.Screen name="Test" component={Test} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

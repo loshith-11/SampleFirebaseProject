@@ -230,7 +230,7 @@ const DashBoard = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.createNewButton}
-          onPress={() => navigation.navigate('ProfileScreen')}>
+          onPress={() => navigation.navigate('Test')}>
           <Image
             source={Images.MY_PROFILE_ICON}
             style={{

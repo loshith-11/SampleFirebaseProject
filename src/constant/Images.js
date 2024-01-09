@@ -11,4 +11,7 @@ export default {
   CASH_ON_HAND: require('../assets/images/income.png'),
   ONLINE_PAYMENT: require('../assets/images/e-payment.png'),
   ATTENDANCE_ICON: require('../assets/images/attendance.png'),
+  MINUS_ICON: require('../assets/images/minus.png'),
+  ADD_ICON: require('../assets/images/add.png'),
+  BANANA_IMG:require('../assets/images/banana-slice-white.png')
 };
